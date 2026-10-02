@@ -1,0 +1,50 @@
+{
+    "savedAt": "2026-10-02 13:38",
+    "scene": "Assets/Scenes/SampleScene.unity",
+    "slots": [
+        {
+            "key": "player",
+            "sprite": "2cf9ad360526d6049938de878af64064:21300000"
+        },
+        {
+            "key": "enemy",
+            "sprite": "cf67b69b907676d41b045d251e205507:21300000"
+        },
+        {
+            "key": "projectile",
+            "sprite": "b31ef3af5cc3c10419ffe769b486d334:21300000"
+        },
+        {
+            "key": "hp",
+            "sprite": "7594edf69b659ea498da0f0c370a70b4:21300000"
+        },
+        {
+            "key": "exp",
+            "sprite": "4a0f729b4ca0e1f40a75aa1184b9c01e:21300000"
+        },
+        {
+            "key": "coin",
+            "sprite": "b127fbcc5313b344ba0e5880e46f3694:21300000"
+        },
+        {
+            "key": "damage",
+            "sprite": "acf454e9adbae2847a258d6186ee98f2:21300000"
+        },
+        {
+            "key": "firerate",
+            "sprite": "14e75770ab6ccab4da127bde2e16aac4:21300000"
+        },
+        {
+            "key": "range",
+            "sprite": "2dbdf5c7792573f4ea7371865ff7a82d:21300000"
+        },
+        {
+            "key": "heal",
+            "sprite": "e61125f02e6d58f4a9f8447e03d2308b:21300000"
+        },
+        {
+            "key": "speed",
+            "sprite": "1ec866ef40625a843bd882d5041e417d:21300000"
+        }
+    ]
+}
