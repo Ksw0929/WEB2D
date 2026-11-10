@@ -1,10 +1,10 @@
 {
-    "savedAt": "2026-10-02 13:38",
+    "savedAt": "2026-11-03 15:42",
     "scene": "Assets/Scenes/SampleScene.unity",
     "slots": [
         {
             "key": "player",
-            "sprite": "2cf9ad360526d6049938de878af64064:21300000"
+            "sprite": "bfc4d456a5b9c7a498a30dcf7abf4ee8:21300000"
         },
         {
             "key": "enemy",

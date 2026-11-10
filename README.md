@@ -85,6 +85,19 @@ Canvas      Screen Space - Overlay · HUD(Script)
 - [ ] `Assets/`, `ProjectSettings/`, `Packages/`는 반드시 포함
 - [ ] 개별 파일 100MB 초과 여부 확인 (대용량은 Git LFS 고려)
 
+### 3.5 2주차 문제 
+| PPU 32 | Scale 2 |
+| :---: | :---: |
+| ![PPU 32 실행 화면](Images/ppu%2032.png) | ![Scale 2 실행 화면](Images/scale%202.png) |
+
+PPU 32와 Scale 2 비교
+
+두 실행 화면에서 파란색 플레이어 원은 거의 같은 크기로 보였다. PPU를 64에서 32로 낮추거나 Transform Scale을 1에서 2로 높이면, 두 경우 모두 스프라이트의 가로와 세로가 월드에서 각각 2배가 된다.
+
+PPU 32는 스프라이트 이미지의 픽셀을 월드 크기로 환산하는 기준을 바꾼다. 같은 스프라이트 에셋을 사용하는 다른 오브젝트에도 적용된다.
+
+Scale 2는 선택한 오브젝트의 Transform 크기를 2배로 늘린다. 해당 오브젝트에 붙은 콜라이더와 자식 오브젝트도 함께 스케일된다.
+
 ## 4. 실행 방법
 
 ### 에디터에서 실행
