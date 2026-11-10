@@ -122,6 +122,30 @@ SRP Batcher와 Sprite Atlas를 각각 켜고 끄면서 Draw Calls, SetPass, 텍�
 | :---: | :---: |
 | ![SRP ON](Images/3-on.png) | ![SRP OFF](Images/3-off.png) |
 
+## 4주차 — Tilemap 렌더링 최적화
+
+### 실습 내용 정리
+
+TilemapLab에서 Chunk와 Individual 렌더링을 비교하고, 텍스처 구성과 청크 컬링 설정이 Draw Calls, SetPass, Tris, FPS에 어떤 영향을 주는지 확인했다.
+
+- **Chunk 모드**는 타일을 청크 단위로 묶어 그린다. #1 Chunk는 Draw Calls 2회, #2 Individual은 1,401회였다. Individual에서 Tris는 줄었지만, FPS도 101에서 18.2로 낮아졌다.
+- **청크 컬링**은 카메라에 보이지 않는 청크를 렌더링에서 제외한다. #4에서 컬링 범위를 수동으로 넓히자 Draw Calls는 2회로 같았지만, Tris는 8,193에서 10,241로 늘었다.
+- 바닥처럼 캐릭터와 앞뒤 정렬이 필요 없는 타일은 Chunk를 사용하고, 캐릭터와의 정렬이 필요한 타일은 별도 타일맵에 두고 Individual을 적용할 수 있다.
+
+### 측정 기록표
+
+![4주차 Tilemap 성능 측정 기록표](Images/4-table.png)
+
+### Game 뷰 Stats 비교
+
+| #1 Chunk | #2 Individual | #6 Mixed + Atlas |
+| :---: | :---: | :---: |
+| ![#1 Stats](Images/4-1.png) | ![#2 Stats](Images/4-2.png) | ![#6 Stats](Images/4-6.png) |
+
+### 추가 분석 — Mixed와 Mixed + Atlas 비교
+
+#3 Mixed와 #6 Mixed + Atlas는 Draw Calls 5회, SetPass 5회, Tris 8,193으로 같았다. 기록된 FPS는 #3에서 144.7, #6에서 36.4였다. 이번 측정에서 Atlas 적용 후 Draw Calls나 SetPass의 감소는 관찰되지 않았다. FPS 차이의 원인은 이 기록만으로 확인하기 어려우므로, 같은 조건에서 여러 번 측정해 비교할 필요가 있다.
+
 ## 4. 실행 방법
 
 ### 에디터에서 실행
@@ -148,7 +172,8 @@ SRP Batcher와 Sprite Atlas를 각각 켜고 끄면서 Draw Calls, SetPass, 텍�
 
 | 문제 | 원인 | 해결 방법 |
 |---|---|---|
-| (예: unitypackage 임포트 실패) | (예: 압축 구조 불일치) | (예: 개별 스크립트 수동 교체) |
+| TilemapLab 스크립트는 있었지만 Hierarchy에 TilemapLab 오브젝트가 보이지 않았다. | 열어둔 씬과 TilemapLab 오브젝트가 배치된 실습 씬이 달랐다. | TilemapLab이 배치된 실습 씬을 열고 Hierarchy에서 오브젝트를 확인했다. |
+
 | | | |
 
 ---
