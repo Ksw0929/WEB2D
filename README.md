@@ -45,10 +45,10 @@
 
 ### 3.1 프로젝트 초기 세팅
 
-- [ ] Unity 6000.5.1f1로 2D URP 템플릿 프로젝트 생성
-- [ ] `2주차_StarterProject.unitypackage` 임포트
-- [ ] `CG2 Starter → Step 1 → Step 2 → Step 3` 순서로 씬 빌드
-- [ ] ▶ Play 버튼으로 정상 동작 확인 (WASD 이동, 자동 공격, 적 스폰)
+- [x] Unity 6000.5.1f1로 2D URP 템플릿 프로젝트 생성
+- [x] `2주차_StarterProject.unitypackage` 임포트
+- [x] `CG2 Starter → Step 1 → Step 2 → Step 3` 순서로 씬 빌드
+- [x] ▶ Play 버튼으로 정상 동작 확인 (WASD 이동, 자동 공격, 적 스폰)
 
 ### 3.2 씬 구성 요약
 
@@ -68,9 +68,9 @@ Canvas      Screen Space - Overlay · HUD(Script)
 
 ### 3.3 웹 빌드 확인
 
-- [ ] `File → Build Profiles → Web → Build And Run`으로 브라우저 실행 확인
-- [ ] 빌드 소요 시간: 약 ( )분
-- [ ] 브라우저 정상 실행 여부: (예/아니오)
+- [x] `File → Build Profiles → Web → Build And Run`으로 브라우저 실행 확인
+- [x] 빌드 소요 시간: 약 ( )분
+- [x] 브라우저 정상 실행 여부: (예/아니오)
 
 **웹 빌드 vs 에디터 Play 차이**
 
@@ -81,9 +81,9 @@ Canvas      Screen Space - Overlay · HUD(Script)
 
 ### 3.4 GitHub 업로드 체크리스트
 
-- [ ] `.gitignore`에 `Library/`, `Temp/`, `Obj/`, `Build/`, `Logs/`, `UserSettings/` 포함 확인
-- [ ] `Assets/`, `ProjectSettings/`, `Packages/`는 반드시 포함
-- [ ] 개별 파일 100MB 초과 여부 확인 (대용량은 Git LFS 고려)
+- [x] `.gitignore`에 `Library/`, `Temp/`, `Obj/`, `Build/`, `Logs/`, `UserSettings/` 포함 확인
+- [x] `Assets/`, `ProjectSettings/`, `Packages/`는 반드시 포함
+- [x] 개별 파일 100MB 초과 여부 확인 (대용량은 Git LFS 고려)
 
 ### 3.5 2주차 문제 
 | PPU 32 | Scale 2 |
@@ -97,6 +97,30 @@ PPU 32와 Scale 2 비교
 PPU 32는 스프라이트 이미지의 픽셀을 월드 크기로 환산하는 기준을 바꾼다. 같은 스프라이트 에셋을 사용하는 다른 오브젝트에도 적용된다.
 
 Scale 2는 선택한 오브젝트의 Transform 크기를 2배로 늘린다. 해당 오브젝트에 붙은 콜라이더와 자식 오브젝트도 함께 스케일된다.
+
+## 3주차 — Batching과 Sprite Atlas
+
+### 실습 내용 정리
+
+SRP Batcher와 Sprite Atlas를 각각 켜고 끄면서 Draw Calls, SetPass, 텍스처 수, 텍스처 메모리, FPS를 비교했다.
+
+- **SRP Batcher**는 렌더링 상태를 준비하는 CPU 비용을 줄인다. Draw Calls가 그대로여도 SetPass가 줄어들 수 있다.
+- **Sprite Atlas**는 여러 스프라이트를 하나의 텍스처로 묶는다. 텍스처 전환과 Draw Calls를 줄일 수 있고, 아틀라스 크기에 따라 텍스처 메모리는 늘어날 수 있다.
+- **Frame Debugger**에서는 SRP Batcher ON/OFF에 따라 렌더링 트리에 표시되는 항목과 드로우콜 줄 수를 비교했다.
+
+### 성능 측정 기록표
+
+![성능 측정 기록표](Images/3-table1.png)
+
+### Frame Debugger 관찰 기록표
+
+![Frame Debugger 관찰 기록표](Images/3-table2.png)
+
+### Frame Debugger 캡처 비교
+
+| SRP ON | SRP OFF |
+| :---: | :---: |
+| ![SRP ON](Images/3-on.png) | ![SRP OFF](Images/3-off.png) |
 
 ## 4. 실행 방법
 
