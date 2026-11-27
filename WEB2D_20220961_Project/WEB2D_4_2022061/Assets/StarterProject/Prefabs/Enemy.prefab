@@ -63,7 +63,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 07ce1947a27446047b7aa6bb1d7e2cef, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -177,6 +177,7 @@ MonoBehaviour:
   attackDamage: 10
   attackCooldown: 1
   expDrop: 10
+  dissolveDuration: 0.8
 --- !u!114 &234069793430620027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +191,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitReceiver
   flashDuration: 0.12
-  flashColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1025229515030654717
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1406,7 +1406,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitReceiver
   flashDuration: 0.12
-  flashColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &272860216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1509,7 +1508,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 0ad12fc47b36bb345a6a491aea032c30, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

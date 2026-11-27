@@ -1,0 +1,116 @@
+using System.Collections;
+using UnityEngine;
+
+/// <summary>
+/// 적 AI — 11주차: 죽으면 바로 사라지지 않고 디졸브로 타 들어간 뒤 풀로 돌아간다.
+///   사망 순서: 체력 0 → 물리 끄기(이동 · 충돌 · 공격 멈춤) → _DissolveAmount 0 → 1 → 풀에 반환
+///   값은 이 렌더러만 쓰는 머티리얼 복사본에 넣는다(10주차 HitReceiver와 같은 복사본). 다른 적과 섞이지 않는다.
+/// </summary>
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer))]
+public class EnemyAI : MonoBehaviour
+{
+    [SerializeField] float moveSpeed = 2.5f, attackRange = 0.9f, attackDamage = 10f, attackCooldown = 1f;
+    [SerializeField] int expDrop = 10;
+    [SerializeField] float dissolveDuration = 0.8f;   // 11주차: 소멸에 걸리는 시간(초)
+
+    Rigidbody2D _rb; SpriteRenderer _sr; Animator _anim; Health _health;
+    Transform _player; float _at; Vector2 _dir;
+    Material _mat; ObjectPool _pool;                   // 11주차
+
+    static readonly int HX = Animator.StringToHash("MoveX"),
+                        HY = Animator.StringToHash("MoveY"),
+                        HS = Animator.StringToHash("Speed"),
+                        HM = Animator.StringToHash("IsMoving");
+    static readonly int DID = Shader.PropertyToID("_DissolveAmount");   // 그래프의 Reference와 같아야 한다
+
+    void Awake()
+    {
+        _rb    = GetComponent<Rigidbody2D>();
+        _sr    = GetComponent<SpriteRenderer>();
+        _anim  = GetComponent<Animator>();
+        _health= GetComponent<Health>();
+        _rb.gravityScale  = 0f;
+        _rb.constraints   = RigidbodyConstraints2D.FreezeRotation;
+        if (_health != null) _health.onDeath.AddListener(OnDeath);
+        _mat  = _sr.material;                          // 이 적만 쓰는 복사본 (HitReceiver가 먼저 만들었으면 같은 것을 돌려준다)
+        _pool = GetComponentInParent<ObjectPool>();    // 스포너의 풀 아래에서 만들어진다
+    }
+
+    void OnEnable()
+    {
+        // 풀에서 다시 나올 때 — 지난번 소멸 상태를 지운다
+        if (_mat != null) _mat.SetFloat(DID, 0f);
+        if (_rb != null) _rb.simulated = true;
+    }
+
+    void OnDestroy()
+    {
+        if (_mat != null) Destroy(_mat);               // 복사본은 직접 지운다
+    }
+
+    void Start()
+    {
+        var p = GameObject.FindGameObjectWithTag("Player");
+        if (p) _player = p.transform;
+    }
+
+    void Update()
+    {
+        if (_health != null && _health.IsDead) return;
+        if (_player == null) return;
+        float dist = Vector2.Distance(transform.position, _player.position);
+        if (dist <= attackRange)
+        {
+            _dir = Vector2.zero; Anim(_dir, false);
+            _at += Time.deltaTime;
+            if (_at >= attackCooldown)
+            { _at = 0f; _player.GetComponent<Health>()?.TakeDamage(attackDamage); }
+        }
+        else
+        {
+            _dir = ((Vector2)_player.position - (Vector2)transform.position).normalized;
+            Anim(_dir, true);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (_health != null && _health.IsDead) return;
+        if (_player == null) return;
+        float d = Vector2.Distance(transform.position, _player.position);
+        // Unity 6000.5 대응: linearVelocity 유지 (velocity alias)
+        _rb.linearVelocity = d > attackRange ? _dir * moveSpeed : Vector2.zero;
+    }
+
+    void Anim(Vector2 d, bool m)
+    {
+        if (_anim != null)
+        { _anim.SetFloat(HX, d.x); _anim.SetFloat(HY, d.y); _anim.SetFloat(HS, m ? d.magnitude : 0f); _anim.SetBool(HM, m); }
+        else if (_sr != null && m && Mathf.Abs(d.x) > 0.05f) _sr.flipX = d.x < 0f;
+    }
+
+    void OnDeath()
+    {
+        _rb.linearVelocity = Vector2.zero;
+        _rb.simulated = false;                         // 물리를 끈다 — 밀리지 않고, 총알이 시체에 막히지 않는다
+        GameManager.Instance?.AddExp(expDrop);
+        StartCoroutine(Dissolve());                    // 바로 SetActive(false) 하지 않는다
+    }
+
+    IEnumerator Dissolve()
+    {
+        // 게임 시간(deltaTime)으로 0 → 1. 게임 오버로 멈추면 소멸도 함께 멈춘다
+        for (float t = 0; t < dissolveDuration; t += Time.deltaTime)
+        {
+            _mat.SetFloat(DID, t / dissolveDuration);
+            yield return null;
+        }
+        _mat.SetFloat(DID, 1f);                        // 마지막 픽셀까지 지운 뒤에
+        if (_pool != null) _pool.Return(gameObject);   // 풀에 돌려준다 (풀이 SetActive(false)도 한다)
+        else gameObject.SetActive(false);
+    }
+
+    public void SetMoveSpeed(float s) => moveSpeed = s;
+    public int ExpDrop => expDrop;
+}
